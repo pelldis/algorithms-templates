@@ -1,4 +1,5 @@
 from typing import List, Tuple
+# ID 83489400
 
 
 def calculate_score(number_list, n) -> int:
