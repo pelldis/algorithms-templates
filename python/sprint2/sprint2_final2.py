@@ -1,4 +1,4 @@
-# 84278869
+# 84377587
 
 
 MATH_OPERATIONS = {
@@ -12,44 +12,31 @@ MATH_OPERATIONS = {
 class Stack:
     def __init__(self):
         self.__items = []
-        self.__head = 0
-        self.__tail = 0
-
-    def __str__(self):
-        return str(self.__items[-1])
 
     def push(self, item):
         self.__items.append(item)
-        self.__items[self.__tail] = item
-        self.__tail += 1
 
-    def pop(self, item):
-        x1 = self.__items[self.__tail - 2]
-        x2 = self.__items.pop()
-        self.__tail -= 1
-        self.__items[self.__tail - 1] = MATH_OPERATIONS[item](x1, x2)
-
-    def get_max(self):
+    def pop(self):
         if not self.__items:
-            return None
-        return max(self.__items)
+            raise IndexError("pop from empty stack")
+        return self.__items.pop()
 
 
 def read_input():
-    """Read from input and make list with numbers."""
-    calc_example = input().split()
-    # read string from input and make one list
-    return calc_example
+    """Read from input."""
+    return input().split()
 
 
 def main():
     stack = Stack()
     for item in read_input():
-        if item not in "*/-+":
+        if item not in MATH_OPERATIONS:
             stack.push(int(item))
         else:
-            stack.pop(item)
-    print(stack)
+            x2 = stack.pop()
+            x1 = stack.pop()
+            stack.push(MATH_OPERATIONS[item](x1, x2))
+    print(stack.pop())
 
 
 if __name__ == "__main__":

@@ -1,12 +1,12 @@
-# 84278470
+# 84377642
 
 
-class EmptyStack(Exception):
-    ...
+class EmptyDequeError(Exception):
+    """Empty Deque error."""
 
 
-class FullStack(Exception):
-    ...
+class FullDequeError(Exception):
+    """Fell Deque error."""
 
 
 class Deque:
@@ -23,17 +23,16 @@ class Deque:
 
     def push_back(self, x):
         """Add element to the end."""
-        if self.__size != self.__max_size:
-            self.__queue[self.__tail] = x
-            self.__tail = self.swap_cursor(self.__tail + 1)
-            self.__size += 1
-        else:
-            raise FullStack("Stack is full")
+        if self.__size == self.__max_size:
+            raise FullDequeError("Deque is full")
+        self.__queue[self.__tail] = x
+        self.__tail = self.swap_cursor(self.__tail + 1)
+        self.__size += 1
 
     def pop_back(self):
         """Remove and print element from the end."""
         if self.__size == 0:
-            raise EmptyStack("Stack is empty")
+            raise EmptyDequeError("Deque is empty")
         x = self.__queue[self.__tail - 1]
         self.__queue[self.__tail - 1] = None
         self.__tail = self.swap_cursor(self.__tail - 1)
@@ -42,17 +41,16 @@ class Deque:
 
     def push_front(self, x):
         """Add element to the beginning."""
-        if self.__size != self.__max_size:
-            self.__queue[self.__head - 1] = x
-            self.__head = self.swap_cursor(self.__head - 1)
-            self.__size += 1
-        else:
-            raise FullStack("Stack is full")
+        if self.__size == self.__max_size:
+            raise FullDequeError("Deque is full")
+        self.__queue[self.__head - 1] = x
+        self.__head = self.swap_cursor(self.__head - 1)
+        self.__size += 1
 
     def pop_front(self):
         """Remove element from the beginning."""
         if self.__size == 0:
-            raise EmptyStack("Stack is empty")
+            raise EmptyDequeError("Deque is empty")
         x = self.__queue[self.__head]
         self.__queue[self.__head] = None
         self.__head = self.swap_cursor(self.__head + 1)
@@ -71,15 +69,13 @@ def read_input():
     return commands, max_size
 
 
-def use_deque(stack, command):
+def use_deque(deque, command):
     """Run deque methods."""
     cmd, *arg = command.split()
     try:
-        method = getattr(stack, cmd)
+        method = getattr(deque, cmd)
         return method(*arg)
-    except EmptyStack:
-        print("error")
-    except FullStack:
+    except (EmptyDequeError, FullDequeError):
         print("error")
 
 
